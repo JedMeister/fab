@@ -21,7 +21,7 @@ ifndef RELEASE
 $(error RELEASE not defined)
 endif
 
-DISTRO = $(shell dirname $(RELEASE))
+DISTRO ?= $(shell dirname $(RELEASE))
 CODENAME = $(shell basename $(RELEASE))
 
 POOL ?= $(FAB_PATH)/pools/$(CODENAME)
@@ -60,6 +60,7 @@ define help/body
 	@echo '  RELEASE                    $(value RELEASE)'
 	@echo
 	@echo '# Build context variables    [VALUE]'
+	@echo '  DISTRO                     $(value DISTRO)'
 	@echo '  FAB_ARCH                   $(value FAB_ARCH)'
 	@echo '  POOL                       $(value POOL)/'
 	@echo '  DEBOOTSTRAP_SUITE          $(value DEBOOTSTRAP_SUITE)'
