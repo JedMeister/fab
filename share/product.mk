@@ -21,10 +21,12 @@ CODENAME ?= $(shell basename $(RELEASE))
 
 UBUNTU = $(shell [ $(DISTRO) = 'ubuntu' ] && echo 'y')
 DEBIAN = $(shell [ $(DISTRO) = 'debian' ] && echo 'y')
+RASPBIAN = $(shell [ $(DISTRO) = 'raspbian' ] && echo 'y')
 
 FAB_ARCH = $(shell dpkg --print-architecture)
 I386 = $(shell [ $(FAB_ARCH) = 'i386' ] && echo 'y')
 AMD64 = $(shell [ $(FAB_ARCH) = 'amd64' ] && echo 'y')
+ARMHF = $(shell [ $(FAB_ARCH) = 'armhf' ] && echo 'y')
 
 ifdef FAB_POOL
 FAB_POOL_PATH=$(FAB_PATH)/pools/$(CODENAME)
@@ -43,7 +45,7 @@ ifndef FAB_HTTP_PROXY
 $(warning FAB_HTTP_PROXY is not defined)
 endif
 
-CONF_VARS_BUILTIN ?= FAB_ARCH FAB_HTTP_PROXY I386 AMD64 RELEASE DISTRO CODENAME DEBIAN UBUNTU KERNEL DEBUG CHROOT_ONLY
+CONF_VARS_BUILTIN ?= FAB_ARCH FAB_HTTP_PROXY I386 AMD64 ARMHF RELEASE DISTRO CODENAME DEBIAN RASPBIAN UBUNTU KERNEL DEBUG CHROOT_ONLY
 
 define filter-undefined-vars
 	$(foreach var,$1,$(if $($(var)), $(var)))
@@ -59,6 +61,8 @@ export FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
 # FAB_PATH dependent infrastructural components
 FAB_SHARE_PATH ?= /usr/share/fab
 BOOTSTRAP ?= $(FAB_PATH)/bootstraps/$(CODENAME)
+
+ifndef CHROOT_ONLY
 CDROOTS_PATH ?= $(FAB_PATH)/cdroots
 CDROOT ?= generic
 MKSQUASHFS ?= /usr/bin/mksquashfs
@@ -71,6 +75,7 @@ ifeq ($(shell echo $(CDROOT) | grep ^/), )
 $(eval _CDROOT = $$(CDROOTS_PATH)/$(CDROOT))
 else
 $(eval _CDROOT = $(CDROOT))
+endif
 endif
 
 COMMON_OVERLAYS_PATH ?= $(FAB_PATH)/common/overlays
@@ -91,7 +96,9 @@ export FAB_PLAN_INCLUDE_PATH
 # default locations of product build inputs
 PLAN ?= plan/main
 ROOT_OVERLAY ?= overlay
+ifndef CHROOT_ONLY
 CDROOT_OVERLAY ?= cdroot.overlay
+endif
 REMOVELIST ?= removelist
 # undefine REMOVELIST if the file doesn't exist
 ifeq ($(wildcard $(REMOVELIST)),)
