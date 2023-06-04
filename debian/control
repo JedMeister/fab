@@ -18,7 +18,8 @@ Depends:
  ${shlibs:Depends},
  turnkey-chroot,
  python3-debian,
- pool
+ pool,
+ live-build,
 Recommends:
  xorriso,
  squashfs-tools
