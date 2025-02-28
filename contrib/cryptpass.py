@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright (c) TurnKey GNU/Linux - https://www.turnkeylinux.org
 #
 # This file is part of Fab
@@ -22,22 +22,26 @@ import crypt
 import getpass
 import random
 
-from typing import NoReturn
+from typing import NoReturn, Any
 
 SALTCHARS = './abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
+
 def random_salt() -> str:
-    return "".join([SALTCHARS[random.randint(0, len(SALTCHARS) - 1)] for i in range(2)])
+    return "".join([SALTCHARS[random.randint(0, len(SALTCHARS) - 1)]
+                   for i in range(2)])
+
 
 def fatal(s: Any) -> NoReturn:
     print("error: " + str(s), file=sys.stderr)
     sys.exit(1)
 
+
 def usage() -> NoReturn:
-    print("Syntax: %s" % sys.argv[0])
+    print(f"Syntax: {sys.argv[0]}")
     print(__doc__.strip())
-    
     sys.exit(1)
+
 
 def main():
     if '-h' in sys.argv:
@@ -54,7 +58,7 @@ def main():
         password = sys.stdin.readline().rstrip("\n")
 
     print(crypt.crypt(password, random_salt()))
-        
+
+
 if __name__ == "__main__":
     main()
-
