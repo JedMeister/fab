@@ -23,8 +23,8 @@ $(info FAB_ARCH not set, falling back to system arch $(HOST_ARCH))
 FAB_ARCH := $(HOST_ARCH)
 endif
 
-DISTRO ?= $(shell dirname $(RELEASE))
-CODENAME ?= $(shell basename $(RELEASE))
+DISTRO := $(shell dirname $(RELEASE))
+CODENAME := $(shell basename $(RELEASE))
 
 UBUNTU = $(shell [ $(DISTRO) = 'ubuntu' ] && echo 'y')
 DEBIAN = $(shell [ $(DISTRO) = 'debian' ] && echo 'y')
