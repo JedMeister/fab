@@ -52,7 +52,7 @@ endif
 
 ifdef FAB_POOL
 FAB_POOL_PATH=$(FAB_PATH)/pools/$(CODENAME)
-#export FAB_POOL_PATH
+export FAB_POOL_PATH
 endif
 
 ifdef FAB_POOL_PATH
@@ -75,12 +75,12 @@ define filter-undefined-vars
 	$(foreach var,$1,$(if $($(var)), $(var)))
 endef
 
-_CONF_VARS_BUILTIN = $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
-_CONF_VARS = $(_CONF_VARS_BUILTIN) $(call filter-undefined-vars,$(CONF_VARS))
+_CONF_VARS_BUILTIN := $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
+_CONF_VARS := $(_CONF_VARS_BUILTIN) $(call filter-undefined-vars,$(CONF_VARS))
 
-#export $(_CONF_VARS)
-#export FAB_CHROOT_ENV = $(shell echo $(_CONF_VARS) | sed 's/ \+/:/g')
-#export FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
+export $(_CONF_VARS)
+export FAB_CHROOT_ENV = $(shell echo $(_CONF_VARS) | sed 's/ \+/:/g')
+export FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
 FAB_CHROOT_ENV = $(shell echo $(_CONF_VARS) | sed 's/ \+/:/g')
 FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
 
@@ -125,7 +125,7 @@ _COMMON_REMOVELISTS = $(call prefix-relative-paths,$(COMMON_REMOVELISTS),$(COMMO
 _COMMON_REMOVELISTS_FINAL = $(call prefix-relative-paths,$(COMMON_REMOVELISTS_FINAL),$(COMMON_REMOVELISTS_FINAL_PATH))
 
 FAB_PLAN_INCLUDE_PATH ?= $(FAB_PATH)/common/plans
-#export FAB_PLAN_INCLUDE_PATH
+export FAB_PLAN_INCLUDE_PATH
 
 # default locations of product build inputs
 PLAN ?= plan/main
