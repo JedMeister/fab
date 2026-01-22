@@ -75,7 +75,7 @@ define filter-undefined-vars
 	$(foreach var,$1,$(if $($(var)), $(var)))
 endef
 
-_CONF_VARS_BUILTIN := $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
+#_CONF_VARS_BUILTIN := $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
 _CONF_VARS := $(_CONF_VARS_BUILTIN) $(call filter-undefined-vars,$(CONF_VARS))
 
 export $(_CONF_VARS)
