@@ -69,20 +69,18 @@ endif
 
 COMMON_PATCHES := turnkey.d $(COMMON_PATCHES)
 
-CONF_VARS_BUILTIN ?= FAB_ARCH HOST_ARCH FAB_HTTP_PROXY AMD64 ARM64 RELEASE DISTRO CODENAME DEBIAN UBUNTU KERNEL DEBUG CHROOT_ONLY DI_LIVE_DEBUG NO_PROXY
+CONF_VARS_BUILTIN ?= FAB_ARCH FAB_HTTP_PROXY FAB_HTTPS_PROXY AMD64 ARM64 RELEASE DEBIAN UBUNTU KERNEL DEBUG CHROOT_ONLY DI_LIVE_DEBUG
 
 define filter-undefined-vars
 	$(foreach var,$1,$(if $($(var)), $(var)))
 endef
 
-#_CONF_VARS_BUILTIN := $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
+_CONF_VARS_BUILTIN := $(call filter-undefined-vars,$(CONF_VARS_BUILTIN))
 _CONF_VARS := $(_CONF_VARS_BUILTIN) $(call filter-undefined-vars,$(CONF_VARS))
 
 export $(_CONF_VARS)
 export FAB_CHROOT_ENV = $(shell echo $(_CONF_VARS) | sed 's/ \+/:/g')
 export FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
-FAB_CHROOT_ENV = $(shell echo $(_CONF_VARS) | sed 's/ \+/:/g')
-FAB_INSTALL_ENV = $(FAB_CHROOT_ENV)
 
 # FAB_PATH dependent infrastructural components
 FAB_SHARE_PATH ?= /usr/share/fab
@@ -99,11 +97,13 @@ CDROOT ?= generic
 MKSQUASHFS ?= /usr/bin/mksquashfs
 MKSQUASHFS_OPTS ?= -no-sparse
 
+$(info CDROOTS_PATH: $(CDROOTS_PATH) - CDROOT: $(CDROOT) - MKSQUASHFS: $(MKSQUASHFS) - MKSQUASHFS_OPTS: $(MKSQUASHFS_OPTS))
+
 # if the CDROOT is a relative path, prefix CDROOTS_PATH
 # we set _CDROOT with eval to improve the readability of $(value _CDROOT) 
 # in help target
 ifeq ($(shell echo $(CDROOT) | grep ^/), )
-$(eval _CDROOT = $$(CDROOTS_PATH)/$(CDROOT))
+$(eval _CDROOT = $(CDROOTS_PATH)/$(CDROOT))
 else
 $(eval _CDROOT = $(CDROOT))
 endif
@@ -115,6 +115,7 @@ COMMON_REMOVELISTS_PATH ?= $(FAB_PATH)/common/removelists
 COMMON_REMOVELISTS_FINAL_PATH ?= $(FAB_PATH)/common/removelists-final
 
 define prefix-relative-paths
+	$(info running 'prefix-relative-paths'...)
 	$(foreach val,$1,$(shell echo $(val) | sed '/^[^\/]/ s|^|$2/|' ))
 endef
 
