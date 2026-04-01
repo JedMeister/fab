@@ -27,6 +27,7 @@ from os.path import basename, isdir, join, relpath
 
 from chroot import Chroot
 from debian import deb822
+import fablib.generate_iso
 from fablib import annotate, cpp, removelist, resolve
 from fablib.installer import Installer, LiveInstaller, PoolInstaller
 from fablib.plan import Dependency, Plan
